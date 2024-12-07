@@ -1,0 +1,94 @@
+<div class="flex justify-between items-center gap-4">
+  <div class="flex items-center gap-2">
+    <button class="btn primary flex items-center gap-2" (click)="setTabActive('json')">
+      <span>
+        <i class="fa-solid fa-vector-square"></i>
+      </span>
+      <span>
+        JSON
+      </span>
+    </button>
+    <button class="btn secondary flex items-center gap-2" (click)="setTabActive('url')">
+      <span>
+        <i class="fa-solid fa-link"></i>
+      </span>
+      <span>
+        URL
+      </span>
+    </button>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="btn tertiary flex items-center gap-2" (click)="setTabActive('configs')">
+      <span>
+        <i class="fa-solid fa-gear"></i>
+      </span>
+      <span>
+        Configs
+      </span>
+    </button>
+  </div>
+</div>
+
+<div class="mt-4" [ngSwitch]="tabActive">
+  <div *ngSwitchCase="'json'">
+    <textarea id="json" rows="20" placeholder="Put JSON here..."
+              class="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+  </div>
+  <div *ngSwitchCase="'url'">
+    <div class="relative mb-6">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+        <i class="fa-solid fa-link"></i>
+      </div>
+      <input type="text"
+             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+             placeholder="Enter URL to get Parcel Info List JSON...">
+    </div>
+  </div>
+  <div *ngSwitchCase="'configs'">
+    <form [formGroup]="configsFg" (ngSubmit)="saveConfigs()" class="flex flex-col gap-4">
+      <fieldset>
+        <label for="parcelUrl" class="block mb-2 font-medium text-gray-900">Parcel URL:</label>
+        <input type="text" id="parcelUrl"
+               formControlName="parcelUrl"
+               class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <div *ngIf="parcelUrlField && parcelUrlField.invalid" class="field-error">
+          <div *ngIf="parcelUrlField.hasError('required')">Parcel URL is required.</div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <label for="sessionId" class="block mb-2 font-medium text-gray-900">Session ID:</label>
+        <input type="text" id="sessionId"
+               formControlName="sessionId"
+               class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <div *ngIf="sessionIdField && sessionIdField.invalid" class="field-error">
+          <div *ngIf="sessionIdField.hasError('required')">Session ID is required.</div>
+        </div>
+      </fieldset>
+      <div>
+        <button type="submit" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white">
+          <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+              <span class="mr-1">
+                <i class="fa-regular fa-floppy-disk"></i>
+              </span>
+              <span>
+                Save Configs
+              </span>
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="flex items-center justify-center mt-4">
+  <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white">
+    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+      <span class="mr-1">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </span>
+      <span>
+        GENERATE
+      </span>
+    </span>
+  </button>
+</div>

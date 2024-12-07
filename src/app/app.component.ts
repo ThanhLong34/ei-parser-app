@@ -1,11 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { TabsComponent } from './components/tabs/tabs.component';
+import { ConfigsService } from './services/configs.service';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [TabsComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'ei-parser-app';
+export class AppComponent implements OnInit {
+  private configsService = inject(ConfigsService);
+
+  ngOnInit() {
+    this.configsService.loadConfigs();
+  }
 }
