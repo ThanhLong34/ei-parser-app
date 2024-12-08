@@ -1,0 +1,12 @@
+<div #jsonViewer class="mt-4 border-2 border-solid border-zinc-800 rounded-lg shadow p-4"
+     [ngClass]="{
+      'hidden': !isShow || parseError
+    }"
+></div>
+
+<div *ngIf="parseError" class="mt-4 text-center text-red-500 text-lg">
+  <div class="underline font-semibold">JSON format invalid. Please check error log:</div>
+  <p>{{ parseError.error }}</p>
+</div>
+
+<app-alert [(isShow)]="isShowAlert" [message]="alertMessage"></app-alert>

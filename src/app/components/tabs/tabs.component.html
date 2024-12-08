@@ -31,8 +31,12 @@
 
 <div class="mt-4" [ngSwitch]="tabActive">
   <div *ngSwitchCase="'json'">
-    <textarea id="json" rows="20" placeholder="Put JSON here..."
-              class="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
+    <form [formGroup]="jsonFg">
+      <textarea id="json" rows="20" placeholder="Put JSON here..."
+                class="block p-2.5 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                formControlName="jsonString"
+      ></textarea>
+    </form>
   </div>
   <div *ngSwitchCase="'url'">
     <div class="relative mb-6">
@@ -41,7 +45,9 @@
       </div>
       <input type="text"
              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-             placeholder="Enter URL to get Parcel Info List JSON...">
+             placeholder="Enter URL to get Parcel Info List JSON..."
+             [(ngModel)]="urlInput"
+      >
     </div>
   </div>
   <div *ngSwitchCase="'configs'">
@@ -80,15 +86,19 @@
   </div>
 </div>
 
-<div class="flex items-center justify-center mt-4">
-  <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white">
-    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
-      <span class="mr-1">
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-      </span>
-      <span>
-        GENERATE
-      </span>
-    </span>
-  </button>
-</div>
+<!--<div class="flex items-center justify-center mt-4">-->
+<!--  <button-->
+<!--    type="button"-->
+<!--    class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white"-->
+<!--    (click)="generate()"-->
+<!--  >-->
+<!--    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">-->
+<!--      <span class="mr-1">-->
+<!--        <i class="fa-solid fa-wand-magic-sparkles"></i>-->
+<!--      </span>-->
+<!--      <span>-->
+<!--        GENERATE-->
+<!--      </span>-->
+<!--    </span>-->
+<!--  </button>-->
+<!--</div>-->

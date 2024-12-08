@@ -19,3 +19,33 @@
     @apply text-red-500 text-sm mt-2;
   }
 }
+
+/* JSON Formatter */
+
+.json-formatter-row {
+  font-family: "Inter", sans-serif !important;
+  margin-bottom: 8px !important;
+}
+
+.json-formatter-key {
+  font-weight: bold;
+}
+
+.json-formatter-constructor-name {
+  opacity: 0.4 !important;
+}
+
+.json-formatter-number {
+  color: #ff045a !important;
+  padding: 3px 8px !important;
+  border-radius: 4px;
+  background-color: #f4e2ff !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  transition: all ease 0.1s;
+}
+
+.json-formatter-number:hover {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  font-weight: bold;
+}
