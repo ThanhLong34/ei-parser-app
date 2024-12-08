@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Subject, takeUntil, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, of, Subject, takeUntil, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 export interface IParcel {
@@ -32,6 +32,8 @@ export interface ParseError {
   error: string;
 }
 
+const PARCEL_URL = 'https://ei-parser-api.netlify.app/.netlify/functions/api'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -41,6 +43,7 @@ export class ParserService {
   private _parcelInfoList = new BehaviorSubject<IParcel[]>([]);
   private _parcelData = new BehaviorSubject<GetParcelDataResponse | undefined>(undefined);
   private _isShowParcelDataDrawer = false;
+  private _parcelList: GetParcelDataResponse[] = []
   loading = false
   parseError?: ParseError;
 
@@ -61,8 +64,21 @@ export class ParserService {
     this._parcelInfoList.next(structuredClone(list));
   }
 
-  loadParcelInfoList() {
-    console.log(this._parcelInfoList.value)
+  loadParcelInfoListInBackground(data: GetParcelDataRequest) {
+    data.parcelIds = this._parcelInfoList.value.reduce((acc: number[], cur) => {
+      return [...acc, ...cur.parcelIds];
+    }, [])
+    return this._http.post<GetParcelDataResponse[]>(PARCEL_URL, data)
+      .pipe(
+        tap((parcels) => {
+          this._parcelList = parcels;
+          console.log('this._parcelList', this._parcelList)
+          return parcels
+        }),
+        catchError((err) => {
+          return throwError(() => err)
+        })
+      )
   }
 
   setParseError(errorMsg: string | undefined | null) {
@@ -72,10 +88,16 @@ export class ParserService {
   }
 
   getParcelData(data: GetParcelDataRequest) {
-    this.loading = true;
-    const url = 'https://ei-parser-api.netlify.app/.netlify/functions/api'
+    const parcelExisting = this._parcelList.find(parcel => parcel.FileInfo.ParcelID === data.parcelIds[0])
+    console.log('parcelExisting', parcelExisting)
+    if (parcelExisting) {
+      this._parcelData.next(parcelExisting)
+      this.showParcelDataDrawer(true)
+      return of([parcelExisting]);
+    }
 
-    return this._http.post<GetParcelDataResponse[]>(url, data)
+    this.loading = true;
+    return this._http.post<GetParcelDataResponse[]>(PARCEL_URL, data)
       .pipe(
         takeUntil(this._destroy$),
         tap((parcels) => {

@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfigsService, IConfigs } from '../../services/configs.service';
-import { ParserService } from '../../services/parser.service';
+import { GetParcelDataRequest, ParserService } from '../../services/parser.service';
 import { debounceTime, distinctUntilChanged, of } from 'rxjs';
 
 export type Tab = 'json' | 'url' | 'configs'
@@ -70,6 +70,12 @@ export class TabsComponent implements OnInit {
     }
 
     this.configsService.saveConfigs(this.configsFg.value as IConfigs)
+
+    const jsonString = this.jsonFg.value.jsonString
+    if (jsonString) {
+      const jsonValue = jsonString.trim()
+      this.generate(jsonValue);
+    }
   }
 
   generate(jsonValue: string) {
@@ -82,7 +88,14 @@ export class TabsComponent implements OnInit {
       }
 
       this.parserService.updateParcelInfoList(json['parcelInfoList']);
-      this.parserService.loadParcelInfoList();
+
+      const data: GetParcelDataRequest = {
+        parcelUrl: this.configsService.configs.parcelUrl,
+        sessionId: this.configsService.configs.sessionId,
+        parcelIds: []
+      }
+      this.parserService.loadParcelInfoListInBackground(data).subscribe();
+
       this.parserService.setParseError(null)
     } catch (err: any) {
       console.error('err', err);
